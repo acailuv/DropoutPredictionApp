@@ -37,7 +37,8 @@ train_features, test_features, train_labels, test_labels = train_test_split(feat
 # Random Forest with only top scoring features
 top_clf = RandomForestClassifier(n_estimators = 100, min_samples_leaf=10, min_samples_split=10)
 top_clf.fit(train_features, train_labels)
-y_pred = top_clf.predict(test_features)
+y_pred = top_clf.predict(test_features) # to be used in confusion matrix
+y_true = train_labels # to be used in confusion matrix
 
 print("Random Forest accuracy:", accuracy_score(test_labels, y_pred))
 
@@ -58,6 +59,8 @@ app.layout = html.Div(children=[
             min=0, max=4, step=0.01, value=3,
             marks={i: '{}'.format(i) for i in range(5)}
         ),
+        html.Br(),
+        html.P(id='current-gpa-selected'),
         html.Br(),
         html.P("Total Debt"),
         dcc.Input(id='debt', type='number', style={"margin-bottom":"10px"}),
@@ -107,6 +110,13 @@ def predict(*args):
         else:
             text_out = "With these values, you are safe."
     return html.P(text_out)
+
+@app.callback(
+    Output('current-gpa-selected', 'children'),
+    [Input('gpa', 'value')]
+)
+def update_output(value):
+    return '> Current Selected GPA: {}'.format(value)
 
 ### DASH CODING ENDS HERE
 if __name__ == '__main__':
