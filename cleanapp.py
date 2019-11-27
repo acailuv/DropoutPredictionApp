@@ -38,29 +38,31 @@ train_features, test_features, train_labels, test_labels = train_test_split(feat
 top_clf = RandomForestClassifier(n_estimators = 100, min_samples_leaf=10, min_samples_split=10)
 top_clf.fit(train_features, train_labels)
 y_pred = top_clf.predict(test_features) # to be used in confusion matrix
-y_true = train_labels # to be used in confusion matrix
+y_true = test_labels # to be used in confusion matrix
+
+# accuracy
+acc = accuracy_score(test_labels, y_pred) * 100
 
 print("Random Forest accuracy:", accuracy_score(test_labels, y_pred))
 
 ### DASH CODING STARTS HERE
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ['https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-app.layout = html.Div(children=[
+app.layout = html.Div(className="container p-5", children=[
     html.H1(children='Predicting Student Dropout Using Random Forest'),
 
 
     html.Div([
-        html.P("Cumulative GPA:"),
+        html.Span("Cumulative GPA:"), html.Span(id='current-gpa-selected'),
+        html.Br(),
         dcc.Slider(
             id='gpa',
             min=0, max=4, step=0.01, value=3,
             marks={i: '{}'.format(i) for i in range(5)}
         ),
-        html.Br(),
-        html.P(id='current-gpa-selected'),
         html.Br(),
         html.P("Total Debt"),
         dcc.Input(id='debt', type='number', style={"margin-bottom":"10px"}),
@@ -77,13 +79,13 @@ app.layout = html.Div(children=[
         html.P("Parent Adjusted Gross Income"),
         dcc.Input(id='pagi', type='number', style={"margin-bottom":"10px"}),
         html.Br(),
-        
-        html.Button("Submit", id='submit-button')
+        html.P("Accuracy: {}%".format(acc)),
+        html.Button("Submit", id='submit-button', className="btn btn-success")
 
     ], style={"float": "left", "width": "40%"}),
 
     html.Div(id='result_of_prediction', children='Enter the values and press the button to predict.',
-    style={"float": "left", "width": "50%", "margin-left": "1%"})
+    style={"float": "left", "width": "50%", "margin-left": "5%", "margin-top": "5%"})
 ])
 @app.callback(
     Output('result_of_prediction', 'children'),
@@ -116,7 +118,7 @@ def predict(*args):
     [Input('gpa', 'value')]
 )
 def update_output(value):
-    return '> Current Selected GPA: {}'.format(value)
+    return ' {}'.format(value)
 
 ### DASH CODING ENDS HERE
 if __name__ == '__main__':
