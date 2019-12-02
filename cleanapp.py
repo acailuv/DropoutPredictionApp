@@ -55,10 +55,14 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(className="container p-5", children=[
+    
+    # Header and Dataset links
     html.H1(children='Predicting Student Dropout Using Random Forest'),
     html.A(children='Data set can be found here.', href='https://docs.google.com/spreadsheets/d/14Adm3IJe_ruQyfW1Dl5BRXvo2b2U8JekMBxxB8IU__M/edit#gid=478244857'),
     html.Br(),
     html.A(children='Labels for Data set can be found here.', href='https://docs.google.com/spreadsheets/d/1evAk7lErSrDJqxDxcEl_VlvcWAOV5uQY8aZ9a3L-j1s/edit#gid=1351755867'),
+    
+    # Prediction Form
     html.Div([ 
         html.Span("Cumulative GPA:"), html.Span(id='current-gpa-selected'),
         html.Br(),
@@ -87,13 +91,13 @@ app.layout = html.Div(className="container p-5", children=[
         html.Button("Submit", id='submit-button', className="btn btn-success"),
         html.Br(),
     ]),
-
     html.H5(id='result_of_prediction', children='Enter the values and press the button to predict. Predictions will appear here.', style={"color":"blue"}),
     html.Br(),
 
+    # Visuals (Graphs)
     html.H1(children='Visuals for Current Session of Random Forest'),
     dcc.Graph(
-        figure = go.Figure( # which is a figure
+        figure = go.Figure( # Confusion Matrix
             data=[
                 go.Heatmap(z = cm, # represented as a heatmap; with the z value to 'cm' variable mentioned above
                     x = ["Predict Not Drop Out", "Predict Drop Out"], # x-axis labels
@@ -106,8 +110,8 @@ app.layout = html.Div(className="container p-5", children=[
             )
         )
     ),
-    dcc.Graph( # 1> a graph
-        figure=go.Figure( # which is a figure
+    dcc.Graph(
+        figure=go.Figure( # Correlation Matrix
             data=[
                 go.Heatmap( # represented as a heatmap
                     x=dataframe.columns, # x-axis labels
@@ -123,6 +127,8 @@ app.layout = html.Div(className="container p-5", children=[
         )
     )
 ])
+
+# Callbacks
 @app.callback(
     Output('result_of_prediction', 'children'),
     [Input('submit-button', 'n_clicks')],
