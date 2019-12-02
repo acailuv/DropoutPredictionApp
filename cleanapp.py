@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix, accuracy_score
 from sklearn.model_selection import train_test_split
+import plotly.graph_objs as go
 
 # Read csv file into a dataframe
 dataframe = pd.read_csv('combined_data.csv')
@@ -40,22 +41,25 @@ top_clf.fit(train_features, train_labels)
 y_pred = top_clf.predict(test_features) # to be used in confusion matrix
 y_true = test_labels # to be used in confusion matrix
 
+# Confusion Matrix
+cm = confusion_matrix(y_pred, y_true)
+
 # accuracy
 acc = accuracy_score(test_labels, y_pred) * 100
 
 print("Random Forest accuracy:", accuracy_score(test_labels, y_pred))
 
 ### DASH CODING STARTS HERE
-
-external_stylesheets = ['https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css']
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(className="container p-5", children=[
     html.H1(children='Predicting Student Dropout Using Random Forest'),
-
-
-    html.Div([
+    html.A(children='Data set can be found here.', href='https://docs.google.com/spreadsheets/d/14Adm3IJe_ruQyfW1Dl5BRXvo2b2U8JekMBxxB8IU__M/edit#gid=478244857'),
+    html.Br(),
+    html.A(children='Labels for Data set can be found here.', href='https://docs.google.com/spreadsheets/d/1evAk7lErSrDJqxDxcEl_VlvcWAOV5uQY8aZ9a3L-j1s/edit#gid=1351755867'),
+    html.Div([ 
         html.Span("Cumulative GPA:"), html.Span(id='current-gpa-selected'),
         html.Br(),
         dcc.Slider(
@@ -80,12 +84,44 @@ app.layout = html.Div(className="container p-5", children=[
         dcc.Input(id='pagi', type='number', style={"margin-bottom":"10px"}),
         html.Br(),
         html.P("Accuracy: {}%".format(acc)),
-        html.Button("Submit", id='submit-button', className="btn btn-success")
+        html.Button("Submit", id='submit-button', className="btn btn-success"),
+        html.Br(),
+    ]),
 
-    ], style={"float": "left", "width": "40%"}),
+    html.H5(id='result_of_prediction', children='Enter the values and press the button to predict. Predictions will appear here.', style={"color":"blue"}),
+    html.Br(),
 
-    html.Div(id='result_of_prediction', children='Enter the values and press the button to predict.',
-    style={"float": "left", "width": "50%", "margin-left": "5%", "margin-top": "5%"})
+    html.H1(children='Visuals for Current Session of Random Forest'),
+    dcc.Graph(
+        figure = go.Figure( # which is a figure
+            data=[
+                go.Heatmap(z = cm, # represented as a heatmap; with the z value to 'cm' variable mentioned above
+                    x = ["Predict Not Drop Out", "Predict Drop Out"], # x-axis labels
+                    y = ["Not Drop Out", "Drop Out"] ) # y-axis labels
+            ],
+            layout = go.Layout( # change some layout properties to this graph (heatmap)
+                title   =   'Confusion matrix for Random Forest Drop Out Prediction', # set the graph's title
+                height  =   600, # change the graph's height
+                width   =   600 # change the graph's width
+            )
+        )
+    ),
+    dcc.Graph( # 1> a graph
+        figure=go.Figure( # which is a figure
+            data=[
+                go.Heatmap( # represented as a heatmap
+                    x=dataframe.columns, # x-axis labels
+                    y=dataframe.columns, # y-axis labels
+                    z=dataframe.corr(method='pearson') # assign z-axis value to be a correlation table
+                )
+            ],
+            layout=go.Layout( # change some layout properties to this graph (heatmap) 
+                title = 'Correlation between variables', # set the graph's title
+                height = 800, # change the graph's height
+                width = 800 # change the graph's width
+            )
+        )
+    )
 ])
 @app.callback(
     Output('result_of_prediction', 'children'),
