@@ -56,15 +56,14 @@ There are sliders at the top to input the Cumulative GPA, then the next column y
 
 We have `~98%` accuracy. Note that this value vary each execution.
 
-Confusion Matrix Pict
+![Confusion Matrix](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/confusionmatrix.jpg)
 
 According to the data that can be visibly found within the confusion matrix, we can see that there is a significant difference between the wrong guessings (blue areas means low concentration od occurences) and the correct guessings (red/beige colored means high concentration of occurences) and this means that the Random Forest can correctly guess the correct result with high accuracy 
 
-Correlation Pict
+![Correlation](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/correlation.jpg)
 
 According to the Correlation data, shown that the red areas mean that the correlation is a positive correlation, meaning that if the x axis' value is high, the y axis' value will be high also. If the colour is blue then it is a negative correlation, meaning that if the x axis' value is high, then the y axis' value will be the opposite from it.
 
-You're safe example
 ## The Script
 -----
 This section will explain the script and the libraries that used, and how the machine work and how the script projects the data in form of graph via Dash.
@@ -83,52 +82,53 @@ Next, `matplotlib.pyplot` is used for the graph objects, then `numpy` and `panda
 
 First, it will reading the CSV File into a dataframe.
 
-csv pict
+![csv](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/csv.JPG)
 
 Second, we do reformat and cleansing data frame.
 
-dataframe pict
+![dataframe](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/cleansing.JPG)
 
 Third, after doing reformat and cleansing the data frame, we choose the top scoring features based on feature importance from dataframe like : [`Total Debt`, `Grants`, `Loans`, `Adjusted Gross Income`, `Parent Adjusted Gross Income`, `CumGPA`, `Dropout`], then we set the 'Drop out' as the label so it can be predicted by this function `labels = np.array(selected_features['Dropout'])`, after that we drop the label from the original dataframe.
 
-feature pic
+![features](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/features.JPG)
 
 Fourth, we train the data, after training the data, we doing testing for the data, and then we split the data, some of the data become subsets where the subsets(selected at random) are trained and tested.
 
-test pic
+![test](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/test.JPG)
 
 Fifth, random forest classifier that has a decision tree inside.
 
-randomforest pic
+![Randomforest]( https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/randomforest.JPG)
+
 ![Decision Tree Illustration](https://miro.medium.com/max/2612/0*f_qQPFpdofWGLQqc.png)
 
 Finally, we print out the accuracy by plugging in the labels marked by `test_labels` variable and the predictions marked by `y_pred` variable into a function specifically designed for calculating accuracy which is `accuracy_score()`.
 
 Next comes the interesting part. The Application itself.
 
-app_initialize
+![initialize](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/app_initialize.JPG)
 
 In here we declare the stylesheet we want to impor into our application and initialize the app by making a `Dash` object.
 
 Then, we need to declare the layout so that the form will be rendered in the application.
 
-layout_declare
+![declare](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/layout_declare.JPG)
 
 Next, we need to insert HTML element such as `<p>` or `<h1>` into our application
 
-header_dataset_links
+![header](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/header_dataset_links.JPG)
 
 With that done, the these lines of codes are the commands for rendering the prediction form
+![prediction](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/prediction.JPG)
 
-prediction_form
 
 Lastly, the graphs that shows additional data such as correlation between features and confusion matrix that shows the amount of inaccuracy visually. That can be achieved by typing in the following code:
+![graph_code](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/graph_code.JPG)
 
-graph_code
 
 We also need to declare callback functions to react accordingly to user input. This can be achieved using the following code:
 
-callback
+![callback](https://raw.githubusercontent.com/acailuv/DropoutPredictionApp/master/Readme_Images/callback.JPG)
 
 ## Dataset Handling
 The dataset is very messy, that is why we need to fill in the gaps accordingly. We decided to remove broken data from the dataset and then fill it some of itself to improve accuracy.
