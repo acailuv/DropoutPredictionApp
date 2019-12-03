@@ -1,7 +1,7 @@
 # Student Dropout Prediction App
 Predict whether a student will be dropped out when goinf through university using 6 most influential features. The dataset provided in this repository is modified from Kaggle.
 
-Since we do not have access to the problem, it is not impossible that we might have missed some extra information that might affect overall predictions. This means that if something is a little bit odd in this prediction app, we cannot say for sure why or how the artificial intelligence predict so. I hope you understand this handicap, enjoy :).
+Since we do not have access to the problem, we might have missed some extra information that might affect overall predictions. This means that if something is a little bit odd in this prediction app, we cannot say for sure why or how the artificial intelligence predict so. I hope you understand this handicap, enjoy :).
 
 ## Team Members
 - Leon Chrisdion
